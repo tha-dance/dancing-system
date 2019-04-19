@@ -1,4 +1,6 @@
 .vscode
-*/input/
 *.csv
 *.txt
+
+*/Datasets_test/
+*/Datasets_train/
