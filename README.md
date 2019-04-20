@@ -3,12 +3,12 @@
 ## This repository is used for implementing the system that we designed in the design report. 
 
 ## Arduino Perspective 
-The code on Arduino collects data from 3 accelerometer sensors and send the data to Raspberry Pi for further processing. 
+The code on Arduino collects data from 3 accelerometer sensors and sends the data to Raspberry Pi for further processing. 
 
 ## Raspberry Pi Perspective 
 
 ## ML model training Perspective
-Basically, there are four algorithms that we trained during the journey of this project. We choose two different implementions of MLP from Dingfan and Archana to form our final Machine Learning subsystem. 
+Initially, there were four algorithms that we trained during the journey of this project. We chose two different implementions of MLP from Dingfan and Archana to form our final Machine Learning subsystem. 
 
 - Random Forest 
 - MLP (scikit learn)
