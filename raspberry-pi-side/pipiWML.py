@@ -63,70 +63,39 @@ moves = {
 }
 scaler_chu = joblib.load('scaler_17april_logout.joblib')
 scaler_df = joblib.load('scaler_df.joblib')
-#scaler_df = pickle.load(open('scaler.pickle', 'rb'))
-#scaler_df = joblib.load('scaler.joblib')
+
 mlp_chu = joblib.load('mlp_17april_logout.joblib')
 mlp_df = joblib.load('model_df.joblib')
-#trial = joblib.load('mlp_15april_edit.joblib')
-#scaler_trial= joblib.load('scaler_15april_edit.joblib')
-#loaded_model = pickle.load(open('pickle_saved.pickle', 'rb'))
-#loaded_model = joblib.load('model.joblib')
+
 
 pred_arr = []
 
 def extract_features(segment):
-    #print('intial ======')
-    #print(segment)
+    
     data = np.asarray(extract(np.asarray(segment)))
-    #print(data)
+   
     data = np.array([data])
     data_chu = scaler_chu.transform(data)
     data_df = scaler_df.transform(data)
-    #print('data before transform ========')
-    #print(data)
-    #data = scaler_df.transform(data)
-    #data = scaler.transform(data)
-    #print('data after transform ========')
-    #print(data)
+   
     return data_chu, data_df
 
 def MLstuff(segment):
     extracted_features_chu, extracted_features_df = extract_features(segment)
-    #print(extracted_features)
     extracted_features_chu = np.nan_to_num(extracted_features_chu)
     extracted_features_df = np.nan_to_num(extracted_features_df)
-    #rf_pred = int(rf.predict(extracted_features))
+
     mlp_chu_pred = int(mlp_chu.predict(extracted_features_chu))
     mlp_df_pred = int(mlp_df.predict_classes(extracted_features_df))+1
-    #label_pred_index_df = int(loaded_model.predict_classes(extracted_features))
+   
+    pred_arr.append(mlp_chu_pred)
+    pred_arr.append(mlp_df_pred)
+    mode, num_mode = Counter(pred_arr).most_common(1)[0]
     
-        #PREDS.extend((rf_pred, mlp_pred))
-        #if len(PREDS) == 3:
-    #pred_arr.append(rf_pred)
-    #pred_arr.append(mlp_pred)
-    #pred_arr.append(label_pred_index_df)
-    print(str(moves.get(mlp_chu_pred)))
-    print(str(moves.get(mlp_df_pred)))
-    
-    #print(str(moves.get(label_pred_index_df)))
-        
-    #mode, num_mode = Counter(pred_arr).most_common(1)[0]
-    #if (num_mode>=3):
-    #    final_pred = moves.get(mode)
-    #    return final_pred
-    
-    if mlp_chu_pred == mlp_df_pred:
-        return moves.get(mlp_chu_pred)
-    
-    #count=0;
-    #for i in range (len(pred_arr)-1):
-    #   if (pred_arr[i] ==pred_arr[i+1]):
-     #       count+=1
-     #   elif (pred_arr[i]!=pred_arr[i+1]):
-      #      count=0
-      #  if (count==3):
-       #     return moves.get(pred_arr[i]) 
-
+    if (num_mode>=3):
+        final_pred = moves.get(mode)
+        return final_pred
+   
     return 'another segment please'
             
 
@@ -319,7 +288,7 @@ if duinoConnectionEstablished and connect(IP_ADDRESS,IP_PORT):
         if enterML == True:
             action = MLstuff(buffer)
             if action == 'another segment please' :
-                buffer = buffer[25:]
+                buffer = buffer[20:]
                 continue
 
             #Power Calculation
