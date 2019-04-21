@@ -61,7 +61,10 @@ def fully_connected_model():
     model.compile(loss='sparse_categorical_crossentropy', optimizer='Adam', metrics=['accuracy'])
 
     return model
-print(feature_train.shape)
+
+estimator = KerasClassifier(build_fn=fully_connected_model, epochs=100, batch_size=100, verbose=1)
+estimator.fit(feature, label)
+model = estimator.model
 
 '''
 model got more parameters ==> more representation power(high capacity) ==> easy to get overfit since representation power is high
@@ -71,9 +74,7 @@ different techniques to avoid overfitting issues
 3. add dropout layer ==> find optimal dropout rate
 '''
 
-estimator = KerasClassifier(build_fn=fully_connected_model, epochs=100, batch_size=100, verbose=1)
-estimator.fit(feature, label)
-model = estimator.model
+
 
 label_pred_index = model.predict_classes(feature_test)
 print(label_pred_index)

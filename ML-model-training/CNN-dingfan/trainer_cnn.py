@@ -66,8 +66,6 @@ def fully_connected_model():
     model.compile(loss='sparse_categorical_crossentropy', optimizer='Adam', metrics=['accuracy'])
 
     return model
-print(feature_train.shape)
-# print(label_train.shape[0])
 
 estimator = KerasClassifier(build_fn=fully_connected_model, epochs=20, batch_size=200, verbose=1)
 estimator.fit(feature_train, label_train)
