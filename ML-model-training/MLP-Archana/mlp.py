@@ -33,6 +33,7 @@ def load_dataset(prefix=''):
 
 def evaluate_model (testX,testy,model):
 	pred = model.predict(testX);
+	pred = model.predict(testX);
 	accuracy = accuracy_score(pred,testy);
 	print (" Confusion matrix \n", confusion_matrix(testy, pred))
 
@@ -48,8 +49,10 @@ trainX = scaler.transform(trainX)
 testX = scaler.transform(testX)
 
 kf = StratifiedKFold(n_splits=5,random_state=4)
-mlp = MLPClassifier(hidden_layer_sizes=(40,40,40))
+mlp = MLPClassifier(hidden_layer_sizes=(40,40,40), alpha =0.001)
 mlp.fit(trainX,trainy);
+
+
 
 joblib.dump(mlp,"mlp_19april_logout")
 joblib.dump(scaler, 'scaler_19april_logout.joblib')
@@ -58,7 +61,7 @@ model = joblib.load("mlp_19april_logout")
 
 results = evaluate_model (testX,testy,model)
 trial = cross_val_score(model,trainX,trainy,cv=kf)
-
+print("iteration x: "+str(trial));
 print('results = %.3f' %results,'cross_val_score = %.3f' %(trial.mean()*100));
 
 

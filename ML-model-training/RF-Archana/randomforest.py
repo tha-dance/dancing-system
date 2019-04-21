@@ -45,24 +45,35 @@ def evaluate_model (testX,testy,model):
 	return accuracy*100.0
 
 
-
+#load dataset and split into train and test
 trainX,trainy,testX,testy= load_dataset()
-#features = load_features()
-#model = RandomForestClassifier(n_estimators =95,criterion = "entropy",max_features = "log2")
-kf = StratifiedKFold(n_splits=5,random_state=4)
+
+# initialise the random forest classifier 
 rf = RandomForestClassifier(n_estimators = 200,criterion = "gini", n_jobs= -1);
+
+# sfm helps filter out features that aren't important to the prediciton
 sfm = SelectFromModel(rf,threshold = 0.00001)
 
-#testX = load_dataset_test('./raffles_testx.txt')
-#testy = load_dataset_test('./raffles_testy.txt')
-
+#fit sfm to train data
 sfm.fit(trainX,trainy)
+
+#transform the test and train data
 trainX_imp = sfm.transform(trainX);
 testX_imp = sfm.transform(testX);
+
+#train random forest
 rf.fit(trainX_imp,trainy)
+
+#make predicition
+pred = model.predict(testX);
+
 joblib.dump(rf,"rf_final")
 model = joblib.load("rf_final")
+
+kf = StratifiedKFold(n_splits=5,random_state=4)
 results = evaluate_model(testX_imp,testy,model)
+
+
 trial = cross_val_score(model,trainX,trainy,cv=kf)
 #for name, importance in zip(features, model.feature_importances_):
 #	print(name, "=", importance)
