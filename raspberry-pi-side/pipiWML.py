@@ -2,8 +2,6 @@ import pandas as pd
 from feature_extraction import extract
 from sklearn.externals import joblib
 import numpy as np
-#import pickle
-#from keras.models import model_from_json
 
 import serial
 import collections
@@ -215,12 +213,6 @@ if duinoConnectionEstablished and connect(IP_ADDRESS,IP_PORT):
 #    time.sleep(delay) # 1 second more than server?
     s1.flushInput()
     print("going into loop now")
-#    while True:
-#        time.sleep(1)
-#        print("num of bytes in buffer = " + str(s1.in_waiting))
-#        if s1.in_waiting :
-#            val = s1.read_until().decode("utf-8")# , "ignore")
-#            print(val)
 
     while serverConnectionEstablished:
         while len(buffer) < bufferSize :
@@ -228,11 +220,10 @@ if duinoConnectionEstablished and connect(IP_ADDRESS,IP_PORT):
                 try:
                     val = s1.read_until().decode("utf-8")
                 except:
-                    print("SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED SKIPPED")
+                    print("Message cannot be decoded by utf-8, something wrong happened during communication. ")
                     val = s1.read_until().decode("utf-8", "ignore")
                     continue
                 val = val[:-1]
-                #print("msg = " + val)
 
                 if val.startswith("#") :
                     val = val.lstrip('#')
@@ -253,7 +244,7 @@ if duinoConnectionEstablished and connect(IP_ADDRESS,IP_PORT):
                         current = float(val.split('|')[4])
                         checksumDuino = int(val.split('|')[5])
                     except ValueError or IndexError:
-                        print("ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR")
+                        print("ValueError or IndexError captured. ")
                         continue
                     #print("voltage = " + str(voltage))
                     #print("current = " + str(current))
@@ -283,7 +274,6 @@ if duinoConnectionEstablished and connect(IP_ADDRESS,IP_PORT):
                         #print("storing pkt " + str(pkt) + " in buffer")
                         buffer.append(dataIntArr)
                         pkt+=1
-        #print (buffer)
 
         if enterML == True:
             action = MLstuff(buffer)
