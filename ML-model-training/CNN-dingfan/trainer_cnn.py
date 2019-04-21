@@ -1,5 +1,13 @@
 '''
-This will be the program to train the model during training scenario
+This script is used to train the CNN model after collecting real data
+'''
+
+'''
+model got more parameters ==> more representation power(high capacity) ==> easy to get overfit since representation power is high
+different techniques to avoid overfitting issues 
+1. L1 or L2 regularization 
+2. decay learning rate
+3. add dropout layer ==> find optimal dropout rate
 '''
 
 import pandas
@@ -34,28 +42,16 @@ NUM_LABEL = len(label_reference)+1
 scaler = preprocessing.StandardScaler()
 scaler.fit(feature)
 feature = scaler.transform(feature)
-# label = preprocessing.normalize(label)
+
+# Here because CNN model prefers 2 dimensional input, I reshape the input from 1 * 54 to 9 * 6
 feature = feature.reshape(len(feature), 9, 6, 1)
 
 feature_train, feature_test, label_train, label_test = cross_validation.train_test_split(feature, label, test_size=0.2, random_state=4)
-# feature_test = to_categorical(feature_test)
-# feature_train = to_categorical(feature_train)
 
 def fully_connected_model():
-    # print(num_feature, num_label)
     # create model 
     model = Sequential()
 
-    # build layers
-    # model.add(Dense(32, input_dim=num_feature, activation='relu'))
-    # model.add(Dropout(0.2))
-    # model.add(Dense(32, activation='relu'))
-    # model.add(Dropout(0.25))
-    # model.add(Dense(32, activation='relu'))
-    # model.add(Dropout(0.25))
-    # model.add(Dense(32, activation='relu'))
-
-    # We can build a CNN to increase accuracy (hopefully) 
     model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(9,6,1)))
     model.add(Conv2D(32, kernel_size=3, activation='relu'))
     model.add(SpatialDropout2D(0.25))
@@ -73,25 +69,11 @@ def fully_connected_model():
 print(feature_train.shape)
 # print(label_train.shape[0])
 
-'''
-model got more parameters ==> more representation power(high capacity) ==> easy to get overfit since representation power is high
-different techniques to avoid overfitting issues 
-1. L1 or L2 regularization 
-2. decay learning rate
-3. add dropout layer ==> find optimal dropout rate
-'''
-
 estimator = KerasClassifier(build_fn=fully_connected_model, epochs=20, batch_size=200, verbose=1)
 estimator.fit(feature_train, label_train)
 
-# seed = 11
-# np.random.seed(seed)
-# kfold = StratifiedKFold(n_splits=10, shuffle=True, random_state=seed) 
-# results = cross_val_score(estimator, feature, label, cv=kfold)
-
+# Extract model from KerasClassifier to facilitate the saving and loading process 
 model = estimator.model 
-# model = fully_connected_model(len_data-1, len(label_reference)+1)
-# model.fit(feature_train, label_train, epochs=200, batch_size=100, verbose=1)
 label_pred_index = model.predict_classes(feature_test)
 print(label_pred_index)
 print(max(label_pred_index))

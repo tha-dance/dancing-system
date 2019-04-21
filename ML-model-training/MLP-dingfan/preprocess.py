@@ -8,12 +8,11 @@ window_size = 50
 step_size = 10
 
 mode = sys.argv[1]
-# print(mode)
 
 dir_path = 'Datasets_' + mode + '/'
 dir = os.listdir(dir_path)
 result = []
-# print(dir)
+
 for csv_file in dir:
     dataframe = pd.read_csv(os.path.join(dir_path, csv_file))
     dataset = dataframe.values

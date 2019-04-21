@@ -38,24 +38,19 @@ scaler = preprocessing.StandardScaler()
 scaler.fit(feature) 
 feature = scaler.transform(feature)
 print(feature[0])
-# label = preprocessing.normalize(label)
-
 
 feature_train, feature_test, label_train, label_test = cross_validation.train_test_split(feature, label, test_size=0.2, random_state=4)
-# feature_test = to_categorical(feature_test)
-# feature_train = to_categorical(feature_train)
 
 def fully_connected_model():
-    # print(num_feature, num_label)
     # create model 
     model = Sequential()
 
     # build layers
-    # Try dropout rate for 0.1, 0.2 and 0.4
     model.add(Dense(64, input_dim=NUM_FEATURE, activation='relu'))
     model.add(Dense(64, activation='relu'))
     model.add(Dense(64, activation='relu'))
     model.add(Dense(32, activation='relu'))
+    # add dropout layer to avoid overfitting issues 
     model.add(Dropout(0.25))
 
     # The number of neurons in the last layer == number of classes 
@@ -67,7 +62,6 @@ def fully_connected_model():
 
     return model
 print(feature_train.shape)
-# print(label_train.shape[0])
 
 '''
 model got more parameters ==> more representation power(high capacity) ==> easy to get overfit since representation power is high
@@ -79,15 +73,8 @@ different techniques to avoid overfitting issues
 
 estimator = KerasClassifier(build_fn=fully_connected_model, epochs=100, batch_size=100, verbose=1)
 estimator.fit(feature, label)
-
-# seed = 11
-# np.random.seed(seed)
-# kfold = StratifiedKFold(n_splits=10, shuffle=True, random_state=seed) 
-# results = cross_val_score(estimator, feature, label, cv=kfold)
-
 model = estimator.model
-# model = fully_connected_model(len_data-1, len(label_reference)+1)
-# model.fit(feature_train, label_train, epochs=200, batch_size=100, verbose=1)
+
 label_pred_index = model.predict_classes(feature_test)
 print(label_pred_index)
 print(max(label_pred_index))
@@ -101,6 +88,10 @@ accuracy = accuracy_score(label_test, label_pred)
 print(matrix)
 print(accuracy)
 
+# Try different methods to save and load models since previously I am curious about whether there is any difference of these methods 
+# if saving model in 64 bit system but loading model in 32 bit system
+
+# pickle 
 with open('model/pickle_saved.pickle', 'wb') as f:
     pickle.dump(model, f)
 print('model saved in pickle. ')
@@ -109,9 +100,11 @@ with open('model/scaler.pickle', 'wb') as f:
     pickle.dump(scaler, f)
 print('scaler saved in pickle. ')
 
+# joblib
 joblib.dump(model, 'model/model_df.joblib')
 joblib.dump(scaler, 'model/scaler_df.joblib')
 
+# Keras model saving
 model_json = model.to_json()
 with open('model/nn_structure.json', 'w') as f:
     f.write(model_json)
