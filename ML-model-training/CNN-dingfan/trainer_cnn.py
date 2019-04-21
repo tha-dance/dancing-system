@@ -62,7 +62,7 @@ def fully_connected_model():
     model.add(Dense(NUM_LABEL, activation='softmax')) # use softmax to represented predicted probabilty
 
     # compile model
-    opt = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+    opt = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0001, amsgrad=False)
     model.compile(loss='sparse_categorical_crossentropy', optimizer='Adam', metrics=['accuracy'])
 
     return model
