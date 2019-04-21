@@ -20,9 +20,9 @@ Initially, there were four algorithms that we trained during the journey of this
 The server code is provided by Professor Peh and its basic function is to build the communication pipeline with Raspeberry Pi, receive predicted dance moves from Pi side and output the next move for dancers to dance accordingly. 
 
 ## Authors 
-Archana Pradeep 
-Jeremy Long Shi Wei
-Loh Denna
-Tee You Kuan 
-Yan Wei Cheng
-Zhao Dingfan
+* Archana Pradeep 
+* Jeremy Long Shi Wei
+* Loh Denna
+* Tee You Kuan 
+* Yan Wei Cheng
+* Zhao Dingfan
