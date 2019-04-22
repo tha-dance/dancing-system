@@ -6,7 +6,7 @@
 The code on Arduino collects data from 3 accelerometer sensors and sends the data to Raspberry Pi for further processing. 
 
 ## Raspberry Pi Perspective 
-Pi receives data from Arduino and parses the data. Then it loads the ML models(We combined 2 models to predict the dance moves in order to make the predicted result more reliable) to predict dance moves from parsed move data. After that it will send the predicted move to server side through communciation protocol.
+Pi receives data from Arduino and parses the data. Then it loads the ML models(We combined 2 models to predict the dance moves in order to make the predicted result more reliable) to predict dance moves from parsed move data. After that it will send the predicted move to server side through wireless communciation protocol.
 
 ## ML model training Perspective
 Initially, there were four algorithms that we trained during the journey of this project. We chose two different implementions of MLP from Dingfan and Archana to form our final Machine Learning subsystem. 
